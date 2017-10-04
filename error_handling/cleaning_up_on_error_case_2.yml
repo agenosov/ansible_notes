@@ -1,0 +1,21 @@
+# Handle an error occurred on executing a single task.
+# Gracefully finish, i.e. remove temp directory which was created before an error.
+- hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+  - name: Make temp directory for some critical data
+    shell: mktemp -d
+    register: tmp_dir_for_certs
+
+# Errorprone block of tasks
+  - block:
+      - name: Simulate an error
+        command: /bin/false
+
+    rescue:
+      - debug: msg="Caught an error"
+
+    always:
+      - name: Remove temp directory with critical assets
+        file: path="{{ tmp_dir_for_certs.stdout }}" state=absent

@@ -1,0 +1,28 @@
+# Handle fatal error which aborts the entire play and gracefully finish,
+# i.e. remove temp directory which was created before an error.
+- hosts: 127.0.0.1
+  connection: local
+  any_errors_fatal: true
+
+  tasks:
+  - name: Make temp directory for some critical data
+    shell: mktemp -d
+    register: tmp_dir_for_certs
+
+# Errorprone block of tasks
+  - block:
+      - name: Set flag indicating that a critical error occurred
+        set_fact:
+          is_boom: true
+
+      - fail: msg="Can't go further"
+        when:
+          - is_boom is defined
+          - is_boom == true 
+
+    rescue:
+      - debug: msg="Caught an error"
+
+    always:
+      - name: Remove temp directory with critical assets
+        file: path="{{ tmp_dir_for_certs.stdout }}" state=absent

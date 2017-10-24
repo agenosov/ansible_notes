@@ -1,0 +1,9 @@
+- hosts: yum-farm
+
+  tasks:
+      - debug: msg="Hello, I'm yum-based host"
+
+- hosts: apt-farm
+
+  tasks:
+      - debug: msg="Hello, I'm apt-based host"

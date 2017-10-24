@@ -1,0 +1,16 @@
+- hosts: farm
+
+  tasks:
+      - set_fact:
+          kernel_major_num: "{{ ansible_kernel | regex_search('([0-9])') }}"
+      
+      # Here we conditionally include a list of tasks.
+      # The obvious expectation is that this list will be included if the condition is met...
+      # But actually Ansible checks the condition for each task in the list.
+      - include: group_distr.yml
+        when: kernel_major_num == "4"
+
+# Below we include a playbook.
+# Besides the fact that we don't specify target hosts before this inclusion
+# (which is a signal that we include a playbook, not a list of tasks), it's a little bit implicitly...
+- include: bootstrap.yml

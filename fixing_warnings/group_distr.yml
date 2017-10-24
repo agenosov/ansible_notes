@@ -1,0 +1,5 @@
+- debug:
+    msg: "kernel version: {{ ansible_kernel }}"
+
+- group_by:
+    key: "{{ ansible_pkg_mgr }}-farm"

@@ -1,0 +1,24 @@
+- hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    address_to_bind: 127.0.0.1
+    address_list: [127.0.0.1, 10.16.1.16]
+
+  tasks:
+
+    - name: Set value conditionally using Jinja2 if template
+      set_fact:
+        fqdn: "{% if address_to_bind in ['127.0.0.1', 'localhost'] %}localhost{% else %}{{ ansible_hostname }}{% endif %}"
+
+    - debug: var=fqdn
+
+    - set_fact:
+        fqdn_list: []
+
+        # TODO: fix below            
+    - set_fact:
+        fqdn_list: "{{ fqdn_list }} + [ {% if item in ['127.0.0.1', 'localhost'] %}localhost{% else %}{{ ansible_hostname }}{% endif %} ]"
+      with_items: address_list
+    
+    - debug: var=fqdn_list

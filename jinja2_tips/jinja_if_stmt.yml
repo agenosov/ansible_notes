@@ -1,3 +1,6 @@
+# Demo of using the Jinja2 if statement
+#
+
 - hosts: 127.0.0.1
   connection: local
 
@@ -11,14 +14,17 @@
       set_fact:
         fqdn: "{% if address_to_bind in ['127.0.0.1', 'localhost'] %}localhost{% else %}{{ ansible_hostname }}{% endif %}"
 
-    - debug: var=fqdn
+    - name: Print the fully qualified domain name deduced from the address to bind
+      debug: var=fqdn
 
+    # Now ensure that such if statement works for both conditions - use a loop.
+    # Note that using single quotes is crucial to construct a list correctly.
     - set_fact:
         fqdn_list: []
 
-        # TODO: fix below            
     - set_fact:
-        fqdn_list: "{{ fqdn_list }} + [ {% if item in ['127.0.0.1', 'localhost'] %}localhost{% else %}{{ ansible_hostname }}{% endif %} ]"
-      with_items: address_list
+        fqdn_list: "{{ fqdn_list }} + [ '{% if item in ['127.0.0.1', 'localhost'] %}localhost{% else %}{{ ansible_hostname }}{% endif %}' ]"
+      with_items: "{{ address_list }}"
     
-    - debug: var=fqdn_list
+    - name: Print the list of FQDNs deduced from the addresses to bind
+      debug: var=fqdn_list

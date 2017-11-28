@@ -1,0 +1,27 @@
+- hosts: 127.0.0.1
+  connection: local
+
+  # TODO: find out why the fantom_path will be registered when the condition is false
+  tasks:
+    - name: Check existance of a fantom directory
+      stat:
+        path: "/tmp/no_such_dir"
+      register: fantom_path
+      when: false
+
+    - block:
+
+        - name: Now we will fail because of the access to fantom_path.stat
+          shell: "ls -la {{ fantom_path }}"
+          when:
+            - fantom_path is defined
+            - fantom_path.stat.exists == false
+
+      rescue:
+        
+        - name: Here is how condition checking should be made 
+          shell: "ls -la {{ fantom_path }}"
+          when:
+            - fantom_path is defined
+            - fantom_path.stat is defined
+            - fantom_path.stat.exists == false

@@ -1,0 +1,16 @@
+# This is a demo of how to use regular expression filters right.
+
+- hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - set_fact:
+        # In case of using the 1-st variant of how we define the fact, everything is fine:
+        # regular expression filter returns None object and the outcome is false.
+        # If you will use the 2-nd variant, there will be an error in case of no match,
+        # because of attempt to get length of a none object.
+        
+        is_astra_linux: "{% if ansible_os_family | regex_search('^Astra Linux*') is none %}false{% else %}true{% endif %}"
+        #is_astra_linux: "{{ ansible_os_family | regex_search('^Astra Linux*') | length > 0 | bool }}"
+
+    - debug: var=is_astra_linux

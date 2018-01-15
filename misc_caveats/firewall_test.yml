@@ -1,0 +1,44 @@
+# This script shows how to check in the right way the result of some check in case when we need to perform this check optionally.
+# In other words, if some condition is met we perform a check and remember (register) the results of such check.
+# And here is the caveat: it turns out that this registered variable is always defined no matter if we performed check or not.
+# So there is a need to carefully test if the required attribute inside this variable is actually defined.
+#
+- hosts: 127.0.0.1
+  connection: local
+  become: true
+
+  tasks:
+    - name: Check if firewalld is installed
+      shell: "service firewalld status"
+      args:
+        warn: false
+      register: firewall_status
+      ignore_errors: true
+
+    - when: firewall_status.rc != 0
+      name: Check if ufw is installed
+      shell: "ufw status"
+      args:
+        warn: false
+      register: ufw_status
+      ignore_errors: true
+
+    - debug: 
+        var=ufw_status
+        verbosity=1
+
+    # Below is the bad example of checking if the variable is defined (which is only can be set in another condition was defined)
+    # In this case the ufw_status is always defined but has no 'rc' attribute if we haven't check status of ufw.
+    - when: 
+        - ufw_status is defined
+        - ufw_status.rc == 0
+      debug: 
+        msg: "ufw is to be used"
+      ignore_errors: true
+   
+    # And below is how is to be done right
+    - when: 
+        - ufw_status.rc is defined
+        - ufw_status.rc == 0
+      debug: 
+        msg: "again, ufw is to be used"

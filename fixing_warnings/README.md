@@ -1,9 +1,10 @@
-## The note about fixing Ansible warnings related to using deprecated utility modules and command line options
+## The note about fixing Ansible warnings related to using deprecated utility modules
 
-First I present an old approach to include tasks and playbooks via using the *include* utility module and how to do it better by using **more explicit** approach. 
-
-For this demo we need two Linux hosts with **different kernel versions and different package managers** (both yum and apt). Create an inventory file with section named *farm* (this group of host is used inside the examples).
+I show an old approach to include tasks and playbooks via using the *include* utility module and then *how to do it better* by using **more explicit** approach.
+Ansible warns us about using deprecated features:
+- [DEPRECATION WARNING]: The use of 'include' for tasks has been deprecated
+- [DEPRECATION WARNING]: 'include' for playbook includes
 
 Launch:
-1. *ansible-playbook -v -i test_inventory fixing_warnings/implicit_includes.yml -u user --ask-pass*.
-2. *ansible-playbook -v -i test_inventory fixing_warnings/explicit_includes.yml -u user --ask-pass*
+    ansible-playbook -v fixing_warnings/implicit_includes.yml
+    ansible-playbook -v -i test_inventory fixing_warnings/explicit_includes.yml -u user --ask-pass*

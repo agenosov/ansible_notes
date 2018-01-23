@@ -1,0 +1,16 @@
+# Just a block of tasks
+
+- name: Create temporary file
+  tempfile:
+    state: file
+  register: tmp_path
+
+- name: Retrieve system status of the file we have created
+  stat:
+    path: "{{ tmp_path.path }}"
+  register: file_status
+
+- name: Display md5 hash of the file
+  debug: var=file_status.stat.md5
+  when:
+    - file_status.stat is defined

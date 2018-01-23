@@ -11,4 +11,3 @@
 
 ### About modules
 
-* module_utils (see the *module_utils* configuration option) are python modules that Ansible is able to combine with Ansible modules when sending them to the remote machine. Having custom module_utils is useful for extracting common code when developing a set of site-specific modules

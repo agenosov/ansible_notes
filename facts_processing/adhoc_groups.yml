@@ -1,0 +1,17 @@
+- hosts: all
+
+  tasks:
+    - group_by:
+        key: "{{ ansible_pkg_mgr }}-farm"
+
+- hosts: yum-farm
+
+  tasks:
+    # Below we expect msg from a yum-based node
+    - debug: msg="This is a {{ ansible_pkg_mgr }}-based host"
+
+- hosts: apt-farm
+
+  tasks:
+    # Below we expect msg from a deb-based host
+    - debug: msg="This is an {{ ansible_pkg_mgr }}-based host"

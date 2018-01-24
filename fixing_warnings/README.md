@@ -7,4 +7,4 @@ Ansible warns us about using deprecated features:
 
 Launch:
     ansible-playbook -v fixing_warnings/implicit_includes.yml
-    ansible-playbook -v -i test_inventory fixing_warnings/explicit_includes.yml -u user --ask-pass*
+    ansible-playbook -v fixing_warnings/explicit_includes.yml

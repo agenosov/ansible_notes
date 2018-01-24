@@ -1,14 +1,12 @@
-- hosts: farm
+- hosts: 127.0.0.1
+  connection: local
 
   tasks:
-      - set_fact:
-          kernel_major_num: "{{ ansible_kernel | regex_search('([0-9])') }}"
-      
       # Here we conditionally include a list of tasks, but do it dynamically.
       # When running this playbook, 
       # we'll see the message about inclusion this .yml file for hosts which match the specified condition
-      - include_tasks: group_distr.yml
-        when: kernel_major_num == "4" 
+      - include_tasks: tasks_block.yml
+        when: true 
 
 # Below we statically import a playbook. This is more explicit than using the 'include' utility module
-- import_playbook: bootstrap.yml
+- import_playbook: separate_playbook.yml

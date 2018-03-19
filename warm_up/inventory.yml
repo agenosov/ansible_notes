@@ -1,0 +1,19 @@
+# starts with the ‘all’ group and has hosts/vars/children entries.
+
+all:
+    hosts:
+        10.16.42.59:
+            require_sensor: true
+    children:
+        #core:
+        #    hosts:
+        #        10.0.0.1
+        #edge:
+        #    hosts:
+        #        10.0.0.2
+    
+    # Variables below are expected to be applied to a whole group of hosts above       
+    vars:
+        ansible_user: "user"
+        # As it's recommended to not store variables in main inventory,
+        # all other group variables are defined in separate files under ./group_vars

@@ -3,11 +3,6 @@
 
 * Demo of gathering local facts and using the *gathering = smart* option in Ansible's config
 
-* Caveat related to working with local facts.
-  In the context of gathering facts related to the product, it should be noted that if the product isn't installed,
-  local facts which we try to gather **would be defined anyway**.
-  It would be just empty *json* in case of product absense (so it's wrong that the facts would be undefined).
-
 * Try another approach for processing server/sensor nodes, using **roles**:
 ** a) don't change current structure of inventory and use the *group_by* approach
 ** b) restruct inventory

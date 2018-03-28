@@ -1,6 +1,9 @@
+# Misc caveats related to checking conditions and working with boolean variables in playbooks
 - hosts: 127.0.0.1
   connection: local
 
+  # Scenario 1. Register a variable conditionally and then check that variable
+  #
   # TODO: find out why the fantom_path will be registered when the condition is false
   tasks:
     - name: Check existance of a fantom directory
@@ -25,3 +28,9 @@
             - fantom_path is defined
             - fantom_path.stat is defined
             - fantom_path.stat.exists == false
+
+  # Scenario 2. Several ways to define and check boolean variables.
+  #
+    - include_tasks: bool_var_misused.yml
+      vars:
+        - interrupt: true

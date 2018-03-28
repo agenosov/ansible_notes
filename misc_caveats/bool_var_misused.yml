@@ -1,0 +1,31 @@
+# Inproperly using of boolean variables may lead to syntax errors which could be cought during runtime
+# Note how the required variable is defined from the 'caller' playbook.
+# Here we try to test it for true in several ways
+#
+
+- debug: 
+    msg: "{{interrupt}}"
+
+- debug:
+    msg: "We just tested if the var is actually equal to 'true'"
+  when:
+    - interrupt is defined
+    - interrupt == true
+
+# In the case below we explicitly cast the result of comparison - this's redundantly of course
+#
+- debug:
+    msg: "We just tested if the var is true and casted the result to bool"
+  when:
+      - interrupt is defined
+      - "{{ interrupt == true | bool }}"
+
+# And now the variant which is to be considered as 'do not do this'
+#
+# Comment the fragment below and only after that the entire play would be finished
+#
+- debug:
+    msg: "We can't be there due to syntax error"
+  when:
+      - interrupt is defined
+      - interrupt is true

@@ -7,6 +7,9 @@
 ** a) don't change current structure of inventory and use the *group_by* approach
 ** b) restruct inventory
 
+* Caveats when working with deb packages (upgrade/downgrade)
+    - see [this issue](https://github.com/ansible/ansible/issues/29451)
+
 * Look at using *http://docs.ansible.com/ansible/latest/playbooks_async.html*
 ** it's not required to explicitly set poll interval - for such case it's possible to use the *poll_interval* configuration option
 

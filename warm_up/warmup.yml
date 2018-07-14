@@ -2,12 +2,35 @@
   become: true
 
   tasks:
+    # As 'my_magic_var' is defined under group_vars/all it's expected to see the following debug message for all available hosts  
     - name: Check visibility of the magic var
       debug:
-        msg: "This is magic: {{ my_magic_var }}"
-
-    - name: Check whether a sensor is required
-      debug:
-        msg: "Require sensor"
+        msg: "{{ inventory_hostname }}"
       when:
-        - require_sensor is defined and require_sensor
+        - my_magic_var is defined
+        - "{{ my_magic_var | length > 0 }}"
+
+- hosts: control
+
+  tasks:
+    - debug:
+        msg: "Control node {{ inventory_hostname }} is going to expose NB API"
+      when:
+        - expose_nb_api is defined and expose_nb_api
+
+- hosts: analytics
+
+  tasks:
+    - debug:
+        msg: "Analytics node {{ inventory_hostname }} is going to expose NB API"
+      when:
+        - expose_nb_api is defined and expose_nb_api
+
+- hosts: agents
+
+  tasks:
+      - debug:
+          msg: "Agent node {{ inventory_hostname }} is going to push status each {{ push_frequency }} seconds"
+        when:
+          - push_frequency is defined
+          - "{{ push_frequency | int > 0 }}"

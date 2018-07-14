@@ -2,15 +2,25 @@
 
 all:
     hosts:
-        10.16.42.59:
-            require_sensor: true
+        # This host doesn't belong to any particular group.
+        # The groups below are for organizing hosts with some specific settings.
+        10.16.42.58:
+    
     children:
-        #core:
-        #    hosts:
-        #        10.0.0.1
-        #edge:
-        #    hosts:
-        #        10.0.0.2
+        # List nodes with specific roles and settings
+        
+        control:
+            hosts:
+                10.16.42.59:
+        
+        analytics:
+            hosts:
+                10.16.42.59:
+
+        agents:
+            hosts:
+                10.16.42.59:
+                10.16.42.60:
     
     # Variables below are expected to be applied to a whole group of hosts above       
     vars:

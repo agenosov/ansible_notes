@@ -8,6 +8,11 @@
 * View the list of all available [inventory plugins](https://docs.ansible.com/ansible/devel/plugins/inventory.html):
     *ansible-doc -t inventory -l*
 
+### About tasks inside playbooks
+
+* It worth noting that tasks are executed in order (one at a time) against all target machines, before moving to the next task.
+
+* At the end of each block of tasks, *notify actions* are triggered.
 
 ### About modules
 

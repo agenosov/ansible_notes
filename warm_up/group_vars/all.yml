@@ -1,0 +1,2 @@
+---
+my_magic_var: "This variable is visible everywhere, i.e. for all hosts above"

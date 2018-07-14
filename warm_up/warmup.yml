@@ -1,0 +1,13 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Check visibility of the magic var
+      debug:
+        msg: "This is magic: {{ my_magic_var }}"
+
+    - name: Check whether a sensor is required
+      debug:
+        msg: "Require sensor"
+      when:
+        - require_sensor is defined and require_sensor

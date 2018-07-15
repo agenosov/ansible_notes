@@ -1,2 +1,3 @@
 ---
-expose_nb_api: false
+# Settings specific for control nodes
+expose_nb_api: true

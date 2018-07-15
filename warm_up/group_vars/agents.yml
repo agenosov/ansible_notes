@@ -1,2 +1,3 @@
 ---
-push_frequency: 1
+# Settings for agent nodes managed by control nodes
+port: 14010

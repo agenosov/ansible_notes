@@ -1,2 +1,3 @@
 ---
-expose_nb_api: true
+# Settings specific for analytics nodes
+auto_purge: true

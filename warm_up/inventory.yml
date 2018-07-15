@@ -2,9 +2,10 @@
 
 all:
     hosts:
-        # This host doesn't belong to any particular group.
+        # These hosts doesn't belong to any particular group.
         # The groups below are for organizing hosts with some specific settings.
         10.16.42.58:
+        10.16.42.59:
     
     children:
         # List nodes with specific roles and settings
@@ -12,6 +13,10 @@ all:
         control:
             hosts:
                 10.16.42.59:
+
+            vars:
+                nb_api_host: localhost
+                nb_api_port: 14020
         
         analytics:
             hosts:

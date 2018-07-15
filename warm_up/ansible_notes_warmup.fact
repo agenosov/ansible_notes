@@ -1,0 +1,6 @@
+#!/usr/bin/python2.7
+
+import json
+import sys
+
+sys.stdout.write(json.dumps({"demo_version": "1.0.0.9"}, indent=4))

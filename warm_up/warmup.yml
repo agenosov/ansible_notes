@@ -1,4 +1,5 @@
-- hosts: all
+- name: Process all hosts including ungrouped
+  hosts: all
   become: true
 
   tasks:
@@ -8,29 +9,52 @@
         msg: "{{ inventory_hostname }}"
       when:
         - my_magic_var is defined
-        - "{{ my_magic_var | length > 0 }}"
+        - my_magic_var | length > 0
 
-- hosts: control
+    - name: Determine a package manager on a target host
+      debug:
+        msg: "On {{ ansible_nodename }} (which is {{ inventory_hostname }}) the package manager is: {{ ansible_pkg_mgr }}"
+
+    - name: Upload script for providing locally supplied facts (i.e. facts about a product we manage)
+      copy: src=ansible_notes_warmup.fact dest=/etc/ansible/facts.d/ mode=0755
+
+    - name: Re-run setup module to collect our custom facts
+      setup: filter="ansible_local"
+
+    - name: Show local facts
+      debug:
+        var: ansible_local.ansible_notes_warmup
+
+- name: Process control nodes
+  hosts: control
+
+  tasks:
+    - when: expose_nb_api is defined and expose_nb_api
+      block:
+        - fail:
+            msg: "Address settings for NB API are not provided"
+          when:
+            - nb_api_host is not defined
+            - nb_api_port is not defined
+
+        - debug:
+            msg: "Control node {{ inventory_hostname }} is going to expose NB API at {{ nb_api_host }}:{{ nb_api_port }}"
+
+- name: Process analytics nodes
+  hosts: analytics
 
   tasks:
     - debug:
-        msg: "Control node {{ inventory_hostname }} is going to expose NB API"
+        msg: "Analytics node {{ inventory_hostname }} is capable of automatic purging excess data"
       when:
-        - expose_nb_api is defined and expose_nb_api
+        - auto_purge is defined and auto_purge
 
-- hosts: analytics
+- name: Process agent nodes
+  hosts: agents
 
   tasks:
     - debug:
-        msg: "Analytics node {{ inventory_hostname }} is going to expose NB API"
+        msg: "Agent node {{ inventory_hostname }} will be available on port {{ port }}"
       when:
-        - expose_nb_api is defined and expose_nb_api
-
-- hosts: agents
-
-  tasks:
-      - debug:
-          msg: "Agent node {{ inventory_hostname }} is going to push status each {{ push_frequency }} seconds"
-        when:
-          - push_frequency is defined
-          - "{{ push_frequency | int > 0 }}"
+        - port is defined
+        - port | int > 0

@@ -1,0 +1,9 @@
+- import_playbook: test_unavailable_node_different_strategy.yml
+
+- hosts: 127.0.0.1
+  connection: local
+
+  # The question is would we end up here in case of imported playbook (above) touches unavailable host.
+  # Without using of the proposed 'break_play_on_batch_failed' option (which must be turned off) the play will be aborted.
+  tasks:
+    - debug: msg="Playbook finished"

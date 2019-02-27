@@ -1,8 +1,6 @@
 * Examples showing when the serial strategy is matters:
 ** using the *pause* module
 
-* Demo of gathering local facts and using the *gathering = smart* option in Ansible's config
-
 * Try another approach for processing server/sensor nodes, using **roles**:
 ** a) don't change current structure of inventory and use the *group_by* approach
 ** b) restruct inventory

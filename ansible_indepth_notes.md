@@ -2,7 +2,8 @@
 
 * Make Ansible **very verbose**:
     - specify *debug = true* under the *defaults* section in *ansible.cfg* or
-    - export ANSIBLE_DEBUG=1
+    - export ANSIBLE_DEBUG=1 
+  The latter variant is preferred because of its flexibility.
 
 * Config file located in HOME dir must be *.ansible.cfg* (**not ansible.cfg**)
 

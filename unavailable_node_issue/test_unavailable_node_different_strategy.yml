@@ -1,0 +1,19 @@
+- name: Serial processing of hosts
+  hosts: all
+  serial: 1
+  break_play_on_batch_failed: false
+
+  tasks:
+    - name: Create temporary file
+      tempfile:
+        state: file
+      register: tmp_path
+
+    - debug: msg="{{ tmp_path.path }} was created on {{ inventory_hostname }}"
+
+    - name: Remove the file created on previous step
+      file:
+        path: "{{tmp_path.path}}"
+        state: absent
+    
+    - debug: msg="{{ tmp_path.path }} was removed on {{ inventory_hostname }}"

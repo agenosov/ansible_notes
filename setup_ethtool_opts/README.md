@@ -18,6 +18,12 @@ Demo-cases:
 
 2. Considering the case when there's no configuration file for the network interface
 
+   ```bash
+   ansible-playbook -i [INV_FILE | INV_LIST] ./toe_setup_check_config.yml -u user --ask-pass --ask-become
+   ```
+
+   Note that in case of no configuration file we create it and specify that the network interface **is not controlled by Network Manager**.
+   Because otherwise settings which we persist in configuration file have no effect - Network Manager doesn't use these configuration.
 
 3. Taking into account Network Manager
 

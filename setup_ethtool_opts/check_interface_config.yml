@@ -1,0 +1,19 @@
+# Required variables:
+# - path to configuration file for network interface
+
+- name: Check presense of configuration file for network interface
+  stat:
+    path: "{{ interface_config_path }}"
+  register: iface_config
+
+- when:
+    - not iface_config.stat.exists
+  blockinfile:
+    create: yes
+    path: "{{ interface_config_path }}"
+    block: |
+      DEVICE={{ interface }}
+      TYPE=Ethernet
+      ONBOOT=yes
+      NM_CONTROLLED=no
+    # NOTE: it's crucial to configure a network interface to not be controllable by NetworkManager.      

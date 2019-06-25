@@ -1,0 +1,33 @@
+# This playbook turns off TCP/UDP segmentation offload on a specified network interface.
+# In order to persist the settings there's a check for presense of configuration file for the network interface.
+#
+- hosts: all
+  become: true
+
+  vars:
+    required_opts: "-K {{ interface }} tso off ufo off"
+  
+  tasks:
+    - name: Check that specifiied network interface exists
+      command: "ethtool {{ interface }}"
+      # NOTE: the command above fails in case there's no specified interface
+
+    - name: Change (turn off) offload parameters of network device
+      command: "ethtool {{ required_opts }}"
+      register: toe_mod_result
+      ignore_errors: true
+
+    # The following step is specific for RedHat-based distributives (on Debian /etc/network/if-up.d is used)
+    - when:
+        - ansible_pkg_mgr == "yum"
+      vars:
+        - interface_config_path: "/etc/sysconfig/network-scripts/ifcfg-{{ interface }}"
+      block:
+        - include_tasks: ./check_interface_config.yml
+
+        - lineinfile:
+              path: "{{ interface_config_path }}"
+              regexp: '^ETHTOOL_OPTS='
+              line: "ETHTOOL_OPTS='{{ required_opts }}'"
+          when:
+            - not toe_mod_result.failed
